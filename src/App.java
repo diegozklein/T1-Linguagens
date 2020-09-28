@@ -9,19 +9,24 @@ import java.nio.file.Paths;
 //n sei como vcs querem fazer mas vou so criar uma classe de boas aqui para a minha parte
 public class App {
 
-    private String ofFile;
-    private String ifFile;
-    private String sourceFile;
+    private static String ofFile;
+    private static String ifFile;
+    private static String sourceFile;
+    private static int dataPointer;
+    private static int[] memory;
 
     public static void main(String[] args) {
-        int[] memoria = new int[1000];
+        memory = new int[10];
         int pontDado = 0;//que armazena um valor inteiro positivo indicando qual a posição de memória deve ser usada.
         int pontProg = 0;//que armazena um inteiro representando o índice do comando atual do programa.
-        for (int i = 0; i < memoria.length; i++) {
-            memoria[i] = 0;
-        }
 
+        ofFile = "of.txt";
+        ifFile = "if.txt";
+        sourceFile = "source";
 
+        String sourceProgram = readSource(sourceFile);
+        int [] ifArrayFile = turnIfFileIntoArray(ifFile);
+        // usem writeInOf para escrever no OF
     }
 
 
@@ -29,9 +34,9 @@ public class App {
         while (true) {
             switch ((/*algo aqui*/)) {
                 case ">"://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
-                    pontDado++;
+                    dataPointer++;
                 case "<"://decrementa o ponteiro de dados para a posição anterior (uma unidade à esquerda).
-                    pontDado--;
+                    dataPointer--;
                 case "+"://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
 
                 case "-"://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
@@ -58,7 +63,7 @@ public class App {
      *
      * @exception IOException     On file not found error
      */
-    private void writeInOF(){
+    private static void writeInOF(){
         Path pathTexto = Paths.get(ofFile);
 
         try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(pathTexto.getFileName(), Charset.forName("utf8")))) {
@@ -76,7 +81,7 @@ public class App {
      * @exception IOException       On file not found error
      * @return                      a String with the content of the SOURCE file
      */
-    public String readSource(String source) {
+    public static String readSource(String source) {
         Path path1 = Paths.get(source);
         String sourceStringyfied ="";
 
@@ -106,7 +111,7 @@ public class App {
      * @exception IOException       on file not found error
      * @return                      an array with the IF file values
      */
-    public int [] turnIfFileIntoArray (String ifFile) {
+    public static int [] turnIfFileIntoArray (String ifFile) {
         Path path1 = Paths.get(ifFile);
         int [] ifArray;
 
@@ -145,7 +150,7 @@ public class App {
      * @exception IOException       On file not found error
      * @return                      the number os values in the IF file
      */
-    public int getSizeForTheIfFileArray (String ifFile) {
+    public static int getSizeForTheIfFileArray (String ifFile) {
         Path path1 = Paths.get(ifFile);
         int size=0;
 
