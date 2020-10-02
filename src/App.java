@@ -5,6 +5,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 //n sei como vcs querem fazer mas vou so criar uma classe de boas aqui para a minha parte
 public class App {
@@ -13,13 +15,13 @@ public class App {
     private static String ifFile;
     private static String sourceFile;
     private static int dataPointer;
-    private static int dataProg;
+    private static int ProgramPointer;
     private static int[] memory;
 
     public static void main(String[] args) {
         memory = new int[10];
         dataPointer = 0;//que armazena um valor inteiro positivo indicando qual a posição de memória deve ser usada.
-        dataProg = 0;//que armazena um inteiro representando o índice do comando atual do programa.
+        ProgramPointer = 0;//que armazena um inteiro representando o índice do comando atual do programa.
 
         ofFile = "of.txt";
         ifFile = "if.txt";
@@ -28,34 +30,60 @@ public class App {
         String sourceProgram = readSource(sourceFile);
         int[] ifArrayFile = turnIfFileIntoArray(ifFile);
         // usem writeInOf para escrever no OF
+        String programa = "++";
+
+        run();
+
+        int[] arquivoIf = new int[10];
     }
 
 
-    public void run() {
+    public static void run() {
+        String programa = "+";
         while (true) {
-            switch ((true)) {
+            switch (programa) {
                 case ">"://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
-                    dataPointer++;
+                    if (dataPointer == 10) {
+                        System.out.println(dataPointer + " Chegamos no valor max");
+                        break;
+                    } else {
+                        dataPointer++;
+                        System.out.println(dataPointer);
+                        break;
+                    }
                 case "<"://decrementa o ponteiro de dados para a posição anterior (uma unidade à esquerda).
-                    dataPointer--;
+                    if (dataPointer == 0) {
+                        System.out.println(dataPointer + " Chegamos no valor max");
+                        break;
+                    } else {
+                        dataPointer--;
+                        System.out.println(dataPointer);
+                        break;
+                    }
                 case "+"://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
-                    memory[dataPointer] = dataProg++;
-                case "-"://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
-                    memory[dataPointer] = dataProg--;
-                case "["://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
 
+                case "-"://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
+
+                case "["://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
+                    if (memory[dataPointer] == 0) {
+
+                    }
                 case "]"://se a posição apontada pelo ponteiro de dados é diferente de 0, então retroceda o ponteiro de programa para o [ correspondente.
 
-                case ","://lê uma entrada do arquivo IF e o armazena na posição apontada pelo ponteiro de dados
-
-                case ".":// escreve no arquivo OF o byte apontado pelo ponteiro de dados.
-
-                case "$"://  termina o programa e imprime o conteúdo da memória no arquivo OF.
+                case ",":
+                    System.out.println("Entrada IF");
+                    break;
+                case ".":
+                    System.out.println("Escrevemos algo em OF");
+                    break;
+                case "$":
+                    System.out.println("Fim do programa");
                     break;
 
                 default:
                     break;
             }
+            break;
         }
 
     }
