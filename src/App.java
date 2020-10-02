@@ -39,44 +39,52 @@ public class App {
 
 
     public static void run() {
-        String programa = "+";
+        
+        String programa = "++";
+       
         while (true) {
-            switch (programa) {
-                case ">"://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
+            switch (programa.charAt(ProgramPointer)) {
+                case '>'://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
                     if (dataPointer == 10) {
                         System.out.println(dataPointer + " Chegamos no valor max");
                         break;
                     } else {
                         dataPointer++;
                         System.out.println(dataPointer);
+                        ProgramPointer++;
                         break;
                     }
-                case "<"://decrementa o ponteiro de dados para a posição anterior (uma unidade à esquerda).
+                case '<'://decrementa o ponteiro de dados para a posição anterior (uma unidade à esquerda).
                     if (dataPointer == 0) {
-                        System.out.println(dataPointer + " Chegamos no valor max");
+                        System.out.println(dataPointer + " Chegamos no valor min");
                         break;
                     } else {
                         dataPointer--;
                         System.out.println(dataPointer);
+                        ProgramPointer++;
                         break;
                     }
-                case "+"://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
-
-                case "-"://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
-
-                case "["://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
+                case '+'://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
+                    memory[dataPointer]++;
+                    ProgramPointer++;
+                    break;
+                case '-'://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
+                    memory[dataPointer]--;
+                    ProgramPointer++;
+                    break;
+                case '['://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
                     if (memory[dataPointer] == 0) {
 
                     }
-                case "]"://se a posição apontada pelo ponteiro de dados é diferente de 0, então retroceda o ponteiro de programa para o [ correspondente.
+                case ']'://se a posição apontada pelo ponteiro de dados é diferente de 0, então retroceda o ponteiro de programa para o [ correspondente.
 
-                case ",":
+                case ',':
                     System.out.println("Entrada IF");
                     break;
-                case ".":
+                case '.':
                     System.out.println("Escrevemos algo em OF");
                     break;
-                case "$":
+                case '$':
                     System.out.println("Fim do programa");
                     break;
 
