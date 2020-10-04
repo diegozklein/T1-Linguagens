@@ -30,7 +30,7 @@ public class App {
         String sourceProgram = readSource(sourceFile);
         int[] ifArrayFile = turnIfFileIntoArray(ifFile);
         // usem writeInOf para escrever no OF
-        String programa = "++";
+
 
         run();
 
@@ -39,9 +39,9 @@ public class App {
 
 
     public static void run() {
-        
-        String programa = "++";
-       
+
+        String programa = ",++.>,++.>,++.";
+        /*
         while (true) {
             switch (programa.charAt(ProgramPointer)) {
                 case '>'://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
@@ -67,10 +67,12 @@ public class App {
                 case '+'://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
                     memory[dataPointer]++;
                     ProgramPointer++;
+                    System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer);
                     break;
                 case '-'://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
                     memory[dataPointer]--;
                     ProgramPointer++;
+                    System.out.println("Voltamos");
                     break;
                 case '['://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
                     if (memory[dataPointer] == 0) {
@@ -93,7 +95,57 @@ public class App {
             }
             break;
         }
+        */
+        for (int i = 0; i < programa.length(); i++) {
+            if (programa.charAt(i) == '>') {
+                if (dataPointer == 10) {
+                    System.out.println("DataPointer cheio");
 
+                } else {
+                    dataPointer++;
+                    ProgramPointer++;
+                    System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
+
+                }
+
+            }
+            if (programa.charAt(i) == '<') {
+                if (dataPointer == 0) {
+                    System.out.println("Datapointer esta vazio");
+                } else {
+                    dataPointer--;
+                    ProgramPointer++;
+                    System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
+                }
+            }
+            if (programa.charAt(i) == '+') {
+                memory[dataPointer]++;
+                ProgramPointer++;
+                System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
+            }
+            if (programa.charAt(i) == '-') {
+                memory[dataPointer]--;
+                ProgramPointer++;
+                System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
+            }
+            if (programa.charAt(i) == ',') {//lê uma linha do arquivo IF e o armazena na posição apontada pelo ponteiro de dados
+                System.out.println("Leitura do IF, dataPointer está em: " + dataPointer + " e ira armazenar em memory[datapointer] que contem valor " + memory[dataPointer] + "\n");
+            }
+            if (programa.charAt(i) == '.') {//escreve no arquivo OF o byte apontado pelo ponteiro de dados.
+                System.out.println("Escrevendo no OF byte apontado pelo DataPointer: " + dataPointer + "\n");
+            }
+            if (programa.charAt(i) == '$') {
+                System.out.println("Fim do programa");
+                break;
+            }
+            if (programa.charAt(i) == '[') {
+                //Lucas sua parte vem aqui
+            }
+            if (programa.charAt(i) == ']') {
+                //Lucas sua parte vem aqui
+            }
+
+        }
     }
 
     /**
