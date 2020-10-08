@@ -102,7 +102,7 @@ public class App {
                     System.out.println("DataPointer cheio");
 
                 } else {
-                    dataPointer++;
+                    //dataPointer++;
                     ProgramPointer++;
                     System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
 
@@ -113,7 +113,7 @@ public class App {
                 if (dataPointer == 0) {
                     System.out.println("Datapointer esta vazio");
                 } else {
-                    dataPointer--;
+                    //dataPointer--;
                     ProgramPointer++;
                     System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
                 }
