@@ -235,7 +235,7 @@ public class App {
      * @exception IOException       on any I/O error
      * @return                      the number os values in the IF file
      */
-    private int getSizeForTheIfFileArray (String ifFile) {
+    private static int getSizeForTheIfFileArray (String ifFile) {
         Path path1 = Paths.get(ifFile);
         int size=0;
 
