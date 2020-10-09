@@ -126,7 +126,7 @@ public class App {
      * @exception IOException           on any other error
      * @return                          a String with the content of the SOURCE file
      */
-    private String readSource(String source) {
+    private static String readSource(String source) {
         Path path1 = Paths.get(source);
         String sourceStringyfied ="";
 
@@ -152,15 +152,17 @@ public class App {
     }
 
     /**
-     * Reads the file IF and turns it into an array of int for easier manipulation
+     * Reads the IF file and turns it into an array of int for easier manipulation
      *
-     * @param ifFile the IF file
-     * @return an array with the IF file values
-     * @throws IOException on file not found error
+     * @param ifFile                    the IF file
+     * @exception NoSuchFileException   on file not found error
+     * @exception NumberFormatException if found anything else other than integer values in the IF file
+     * @exception IOException           on any other error
+     * @return                          an array with the IF file values
      */
-    public static int[] turnIfFileIntoArray(String ifFile) {
+    private int [] turnIFFileIntoArray(String ifFile) {
         Path path1 = Paths.get(ifFile);
-        int[] ifArray;
+        int [] IFArray;
 
         try (BufferedReader reader = Files.newBufferedReader(path1.getFileName(), Charset.forName("utf8"))) {
             String line = null;
@@ -168,27 +170,63 @@ public class App {
             // checks the size of the future array for the IF file
             int size = getSizeForTheIfFileArray(ifFile);
 
-            ifArray = new int[size];
+            IFArray = new int[size];
 
             int index = 0;
-            int IFvalue;
+            int IFValue;
 
             while ((line = reader.readLine()) != null) {
                 if (!line.isEmpty()) {
                     line = line.trim();
-                    IFvalue = parseInt(line);
-                    ifArray[index] = IFvalue;
-                    index++;
+
+                    // if the value in the IF file is a number it is entered as a single value in the array
+                    if (isNumeric(line)) {
+                        IFValue = Integer.parseInt(line);
+                        IFArray[index] = IFValue;
+                        index++;
+                    }
+
+                    // if the value is a String it is entered as a sequence of bytes
+                    else {
+                        for (int i=0; i<line.length(); i++) {
+                            IFValue = (byte) line.charAt(i);
+                            IFArray[index] = IFValue;
+                            index++;
+                        }
+                    }
+
                 }
             }
 
-            return ifArray;
+            return IFArray;
 
+        } catch (NoSuchFileException x) {
+            System.err.format("IF File not found.\n", x);
+        } catch (NumberFormatException x) {
+            System.err.print("IF file must contain only integer numbers.\n");
         } catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("I/O error: %s%n\n", x);
         }
         return null;
     }
+
+
+    /**
+     * Checks if the line read in the IF file is a number
+     *
+     * @param line  the line in the IF file
+     * @return      true if it is a int or false otherwise
+     */
+    private static boolean isNumeric(String line) {
+        try {
+            Integer.parseInt(line);
+            return true;
+        } catch(NumberFormatException e){
+            return false;
+        }
+    }
+
+
 
     /**
      * reads the IF file to check how many values it has
