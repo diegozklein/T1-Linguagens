@@ -1,12 +1,12 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+
+import static java.lang.Integer.parseInt;
 
 //n sei como vcs querem fazer mas vou so criar uma classe de boas aqui para a minha parte
 public class App {
@@ -39,71 +39,18 @@ public class App {
 
 
     public static void run() {
+        String programa = ">.>.>.>.";
 
-        String programa = ",++.>,++.>,++.";
-        /*
-        while (true) {
-            switch (programa.charAt(ProgramPointer)) {
-                case '>'://incrementa o ponteiro de dados para a próxima posição (uma unidade à direita).
-                    if (dataPointer == 10) {
-                        System.out.println(dataPointer + " Chegamos no valor max");
-                        break;
-                    } else {
-                        dataPointer++;
-                        System.out.println(dataPointer);
-                        ProgramPointer++;
-                        break;
-                    }
-                case '<'://decrementa o ponteiro de dados para a posição anterior (uma unidade à esquerda).
-                    if (dataPointer == 0) {
-                        System.out.println(dataPointer + " Chegamos no valor min");
-                        break;
-                    } else {
-                        dataPointer--;
-                        System.out.println(dataPointer);
-                        ProgramPointer++;
-                        break;
-                    }
-                case '+'://incrementa em uma unidade a posição apontada pelo ponteiro de dados.
-                    memory[dataPointer]++;
-                    ProgramPointer++;
-                    System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer);
-                    break;
-                case '-'://decrementa em uma unidade a posição apontada pelo ponteiro de dados.
-                    memory[dataPointer]--;
-                    ProgramPointer++;
-                    System.out.println("Voltamos");
-                    break;
-                case '['://se a posição apontada pelo ponteiro de dados é 0, então desloque o ponteiro de programa para o próximo comando em sequência ao ] correspondente. Caso contrário, avance o ponteiro de programa.
-                    if (memory[dataPointer] == 0) {
+        int linha = 0;
 
-                    }
-                case ']'://se a posição apontada pelo ponteiro de dados é diferente de 0, então retroceda o ponteiro de programa para o [ correspondente.
-
-                case ',':
-                    System.out.println("Entrada IF");
-                    break;
-                case '.':
-                    System.out.println("Escrevemos algo em OF");
-                    break;
-                case '$':
-                    System.out.println("Fim do programa");
-                    break;
-
-                default:
-                    break;
-            }
-            break;
-        }
-        */
         for (int i = 0; i < programa.length(); i++) {
             if (programa.charAt(i) == '>') {
                 if (dataPointer == 10) {
                     System.out.println("DataPointer cheio");
 
                 } else {
-                    //dataPointer++;
-                    ProgramPointer++;
+                    dataPointer++;
+                    //ProgramPointer++;
                     System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
 
                 }
@@ -113,8 +60,8 @@ public class App {
                 if (dataPointer == 0) {
                     System.out.println("Datapointer esta vazio");
                 } else {
-                    //dataPointer--;
-                    ProgramPointer++;
+                    dataPointer--;
+                    //ProgramPointer++;
                     System.out.println("dataPointer = " + dataPointer + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
                 }
             }
@@ -129,9 +76,14 @@ public class App {
                 System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
             }
             if (programa.charAt(i) == ',') {//lê uma linha do arquivo IF e o armazena na posição apontada pelo ponteiro de dados
+                int line = parseInt(readSource("if.txt", linha));
+                memory[dataPointer] = line;
                 System.out.println("Leitura do IF, dataPointer está em: " + dataPointer + " e ira armazenar em memory[datapointer] que contem valor " + memory[dataPointer] + "\n");
+                linha++;
             }
             if (programa.charAt(i) == '.') {//escreve no arquivo OF o byte apontado pelo ponteiro de dados.
+                int dado = memory[dataPointer];
+                writeInOF(dado);
                 System.out.println("Escrevendo no OF byte apontado pelo DataPointer: " + dataPointer + "\n");
             }
             if (programa.charAt(i) == '$') {
@@ -153,11 +105,12 @@ public class App {
      *
      * @throws IOException On file not found error
      */
-    private static void writeInOF() {
+    private static void writeInOF(int dado) {
         Path pathTexto = Paths.get(ofFile);
 
-        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(pathTexto.getFileName(), Charset.forName("utf8")))) {
-            writer.println(memory[dataPointer]);
+        try {
+            PrintWriter writer = new PrintWriter(Files.newBufferedWriter(pathTexto.getFileName(), Charset.forName("utf8")));
+            writer.println(12);
         } catch (IOException x) {
             System.err.format("Erro de E/S: %s%n", x);
         }
@@ -171,19 +124,26 @@ public class App {
      * @return a String with the content of the SOURCE file
      * @throws IOException On file not found error
      */
-    public static String readSource(String source) {
+    public static String readSource(String source, int i) {
         Path path1 = Paths.get(source);
         String sourceStringyfied = "";
 
         try (BufferedReader reader = Files.newBufferedReader(path1.getFileName(), Charset.forName("utf8"))) {
             String line = null;
 
+            int j = 0;
             while ((line = reader.readLine()) != null) {
 
                 if (!line.isEmpty()) {
-                    line = line.trim();
-                    sourceStringyfied = sourceStringyfied + line;
+                    if (j == i) {
+                        line = line.trim();
+                        sourceStringyfied = sourceStringyfied + line;
+
+
+                    }
+                    j++;
                 }
+
             }
 
             return sourceStringyfied;
@@ -219,7 +179,7 @@ public class App {
             while ((line = reader.readLine()) != null) {
                 if (!line.isEmpty()) {
                     line = line.trim();
-                    IFvalue = Integer.parseInt(line);
+                    IFvalue = parseInt(line);
                     ifArray[index] = IFvalue;
                     index++;
                 }
