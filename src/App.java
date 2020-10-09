@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import static java.lang.Integer.parseInt;
 
-//n sei como vcs querem fazer mas vou so criar uma classe de boas aqui para a minha parte
+
 public class App {
 
     private static String ofFile;
