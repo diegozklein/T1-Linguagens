@@ -1,6 +1,7 @@
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLOutput;
@@ -76,8 +77,8 @@ public class App {
                 System.out.println("Memory[dataPointer] = " + memory[dataPointer] + "\n" + "ProgramPointer = " + ProgramPointer + "\n");
             }
             if (programa.charAt(i) == ',') {//lê uma linha do arquivo IF e o armazena na posição apontada pelo ponteiro de dados
-                int line = parseInt(readSource("if.txt", linha));
-                memory[dataPointer] = line;
+
+                memory[dataPointer] = 0;
                 System.out.println("Leitura do IF, dataPointer está em: " + dataPointer + " e ira armazenar em memory[datapointer] que contem valor " + memory[dataPointer] + "\n");
                 linha++;
             }
@@ -118,38 +119,34 @@ public class App {
     }
 
     /**
-     * Reads the SOURCE file and turns it into a single String for easier manuipulation
+     * Reads the SOURCE file and turns it into a single String for easier manipulation
      *
-     * @param source the SOURCE file
-     * @return a String with the content of the SOURCE file
-     * @throws IOException On file not found error
+     * @param source                    the SOURCE file
+     * @exception NoSuchFileException   on file not found error
+     * @exception IOException           on any other error
+     * @return                          a String with the content of the SOURCE file
      */
-    public static String readSource(String source, int i) {
+    private String readSource(String source) {
         Path path1 = Paths.get(source);
-        String sourceStringyfied = "";
+        String sourceStringyfied ="";
 
         try (BufferedReader reader = Files.newBufferedReader(path1.getFileName(), Charset.forName("utf8"))) {
             String line = null;
 
-            int j = 0;
             while ((line = reader.readLine()) != null) {
 
                 if (!line.isEmpty()) {
-                    if (j == i) {
-                        line = line.trim();
-                        sourceStringyfied = sourceStringyfied + line;
-
-
-                    }
-                    j++;
+                    line = line.trim();
+                    sourceStringyfied = sourceStringyfied + line;
                 }
-
             }
 
             return sourceStringyfied;
 
+        } catch (NoSuchFileException x) {
+            System.err.format("SOURCE File not found.\n", x);
         } catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("I/O Error %s%n\n", x);
         }
         return null;
     }
