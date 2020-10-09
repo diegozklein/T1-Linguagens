@@ -18,6 +18,8 @@ public class App {
     private static int dataPointer;
     private static int ProgramPointer;
     private static int[] memory;
+    private static String ofFileContent;
+    private static String ofFileContentReadableString;
 
     public static void main(String[] args) {
         memory = new int[10];
@@ -27,9 +29,11 @@ public class App {
         ofFile = "of.txt";
         ifFile = "if.txt";
         sourceFile = "source";
+        ofFileContent="";
+        ofFileContentReadableString="";
 
         String sourceProgram = readSource(sourceFile);
-        int[] ifArrayFile = turnIfFileIntoArray(ifFile);
+        int[] ifArrayFile = turnIFFileIntoArray(ifFile);
         // usem writeInOf para escrever no OF
 
 
@@ -83,9 +87,10 @@ public class App {
                 linha++;
             }
             if (programa.charAt(i) == '.') {//escreve no arquivo OF o byte apontado pelo ponteiro de dados.
-                int dado = memory[dataPointer];
-                writeInOF(dado);
-                System.out.println("Escrevendo no OF byte apontado pelo DataPointer: " + dataPointer + "\n");
+                ofFileContent = ofFileContent + memory[dataPointer] + "\n";
+                ofFileContentReadableString = ofFileContentReadableString + Character.toString((char)memory[dataPointer]);
+                ProgramPointer++;
+                break;
             }
             if (programa.charAt(i) == '$') {
                 System.out.println("Fim do programa");
@@ -102,20 +107,18 @@ public class App {
     }
 
     /**
-     * Writes the current position of the memory int the OF file
+     * Writes the current position of the memory in the OF file
      *
-     * @throws IOException On file not found error
+     * @exception IOException           on any I/O error
      */
-    private static void writeInOF(int dado) {
+    private void writeInOF(){
         Path pathTexto = Paths.get(ofFile);
 
-        try {
-            PrintWriter writer = new PrintWriter(Files.newBufferedWriter(pathTexto.getFileName(), Charset.forName("utf8")));
-            writer.println(12);
+        try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(pathTexto.getFileName(), Charset.forName("utf8")))) {
+            writer.println(ofFileContent);
         } catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("I/O Error: %s%n\n", x);
         }
-
     }
 
     /**
