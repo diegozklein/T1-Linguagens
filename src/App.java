@@ -160,7 +160,7 @@ public class App {
      * @exception IOException           on any other error
      * @return                          an array with the IF file values
      */
-    private int [] turnIFFileIntoArray(String ifFile) {
+    private static int [] turnIFFileIntoArray(String ifFile) {
         Path path1 = Paths.get(ifFile);
         int [] IFArray;
 
@@ -229,29 +229,41 @@ public class App {
 
 
     /**
-     * reads the IF file to check how many values it has
+     * Reads the IF file to check how many values it has
      *
-     * @param ifFile the IF file
-     * @return the number os values in the IF file
-     * @throws IOException On file not found error
+     * @param ifFile                the IF file
+     * @exception IOException       on any I/O error
+     * @return                      the number os values in the IF file
      */
-    public static int getSizeForTheIfFileArray(String ifFile) {
+    private int getSizeForTheIfFileArray (String ifFile) {
         Path path1 = Paths.get(ifFile);
-        int size = 0;
+        int size=0;
 
         try (BufferedReader reader = Files.newBufferedReader(path1.getFileName(), Charset.forName("utf8"))) {
             String line = null;
 
             while ((line = reader.readLine()) != null) {
-                if (!line.isEmpty()) {
-                    size++;
+
+                if(!line.isEmpty()){
+
+                    // if the value in the IF file is a number it is counted as a single entry in the array
+                    if (isNumeric(line)) {
+                        size++;
+                    }
+
+                    // if the value is a String it creates as many spaces as there are characters
+                    else {
+                        for (int i=0; i<line.length(); i++) {
+                            size++;
+                        }
+                    }
                 }
             }
 
-            return size;
+            return size+1;
 
         } catch (IOException x) {
-            System.err.format("Erro de E/S: %s%n", x);
+            System.err.format("I/O Error: %s%n\n", x);
         }
         return 0;
     }
